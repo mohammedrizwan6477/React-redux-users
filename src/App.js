@@ -1,23 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
-
+import React, { useEffect } from "react";
+import "./App.css";
+import { useDispatch, useSelector } from "react-redux";
+import { userAction } from "./Action/userAction";
+import { RotatingLines } from "react-loader-spinner";
+import User from "./User";
 function App() {
+  const dispatch = useDispatch();
+  const userList = useSelector((state) => state.userList);
+  const { loading, error } = userList;
+  useEffect(() => {
+    dispatch(userAction());
+  }, [dispatch]);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>React-Redux</h1>
+
+      {loading ? (
+        <RotatingLines
+          strokeColor="grey"
+          strokeWidth="5"
+          animationDuration="0.75"
+          width="96"
+          visible={true}
+        />
+      ) : error ? (
+        <h4>{error}</h4>
+      ) : (
+        <User />
+      )}
     </div>
   );
 }
